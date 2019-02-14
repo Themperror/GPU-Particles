@@ -10,7 +10,7 @@ cbuffer SystemBuffer : register(b0)
     float _deltaTime;
     float _time;
     float _fps;
-    float3 _dummyCB;
+    float3 _random;
 };
 cbuffer CameraBuffer : register(b1)
 {
@@ -42,12 +42,12 @@ struct Particle
 };
 StructuredBuffer<Particle> ParticleIn : register(t0);
 StructuredBuffer<int> ParticleCountIn : register(t1);
-Texture2D Random : register(t2);
+Texture2D<float> Random : register(t2);
 
 RWStructuredBuffer<Particle> ParticleOut : register(u0);
 RWStructuredBuffer<int> ParticleCountOut : register(u1);
 
-SamplerState WrappedLinearSampler : register(s0);
+SamplerState WrappedPointSampler : register(s0);
 
 float wang_hash(inout uint seed)
 {
