@@ -21,8 +21,8 @@ void Themp::Game::Start()
 	m_Camera->SetProjection(Camera::CameraType::Perspective);
 	m_Camera->SetNear(0.1f);
 	m_Camera->SetFar(1000.0f);
-	m_Camera->SetPosition(0, 0, -50);
-	m_Camera->SetTarget(XMFLOAT3(0, 0, -50));
+	m_Camera->SetPosition(0, 0, -400);
+	m_Camera->SetTarget(XMFLOAT3(0, 0, -400));
 
 	m_ParticleManager = new ParticleManager();
 	ParticleSystem* ps = m_ParticleManager->CreateParticleSystem();
@@ -44,8 +44,10 @@ void Themp::Game::Update(double dt)
 	ImGui::Text("Particle Count: %i", m_ParticleManager->m_ParticleSystems[0]->m_CurrentParticleCount);
 	ImGui::Checkbox("Draw Quads", &m_ParticleManager->m_DrawQuads);
 	ImGui::SliderInt("Particles Per Second", &cBufferData.rate, 0, 100000);
-	ImGui::SliderFloat("Gravity", &cBufferData.gravity, 0.1, 100);
+	ImGui::SliderFloat("Gravity", &cBufferData.gravity, 0.1f, 100.0f);
+	ImGui::SliderFloat("Mass", &cBufferData.mass, 0.1f, 10000.0f);
 	ImGui::SliderFloat2("Lifetime (Min/Max)", &cBufferData.LifeTimeMin, 0, 30);
+	ImGui::SliderFloat2("Scale (Min/Max)", &cBufferData.ScaleMin, 0, 30);
 	ImGui::SliderFloat3("Min Velocity", (float*)&cBufferData.VelocityMin, -100, 100);
 	ImGui::SliderFloat3("Max Velocity", (float*)&cBufferData.VelocityMax, -100, 100);
 	ImGui::SliderFloat3("Min Position", (float*)&cBufferData.PositionMin, -100, 100);

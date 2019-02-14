@@ -112,6 +112,7 @@ namespace Themp
 		static void Print(const std::string & message, ...);
 
 		static Themp::System* tSys;
+		static bool m_WindowIsChanging;
 		System() {}; 
 		void Start();
 		void Interrupt() {}; // Alt tab, lost focus etc...

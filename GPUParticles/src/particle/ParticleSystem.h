@@ -97,11 +97,11 @@ class ParticleSystem
 public:
 	struct ParticleSystemBuffer
 	{
-		float LifeTimeMin = 1.0f, LifeTimeMax = 3.0f;
+		float LifeTimeMin = 10.0f, LifeTimeMax = 20.0f;
 		float ScaleMin = 1.0f, ScaleMax = 2.0f;
 		uint32_t newParticles = 1024*256, maxParticles = 1024*1024*2;
-		float gravity = 10.0f, mass = 1.0f; //8
-		int rate = 128, numDispatch = 1, d2, d3; // 8
+		float gravity = 100.0f, mass = 5000.0f; //8
+		int rate = 50000, numDispatch = 1, d2, d3; // 8
 		XMFLOAT4 VelocityMin = XMFLOAT4(-30,-30,-30, 0), VelocityMax = XMFLOAT4(30, 30, 30, 0);
 		XMFLOAT4 PositionMin = XMFLOAT4(-100, -100, -100, 0), PositionMax = XMFLOAT4(100, 100, 100, 0);
 		XMFLOAT4 Position = XMFLOAT4(0, 0, 0, 1);

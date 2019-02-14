@@ -32,6 +32,7 @@ namespace Themp
 
 	System* System::tSys = nullptr;
 	FILE* System::logFile = nullptr;
+	bool System::m_WindowIsChanging = false;
 	void System::Start()
 	{
 		srand((uint32_t)time(nullptr));
@@ -569,9 +570,11 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			break;
 		case WM_ENTERSIZEMOVE:
 			SetTimer(hWnd, 1, USER_TIMER_MINIMUM, 0);
+			Themp::System::m_WindowIsChanging = true;
 		break;
 		case WM_EXITSIZEMOVE:
 		{
+			Themp::System::m_WindowIsChanging = false;
 			//we're done resizing the window, now resize all the rendering resources
 			GetWindowRect(Themp::System::tSys->m_Window, &windowRect);
 			newWindowSizeX = windowRect.right;

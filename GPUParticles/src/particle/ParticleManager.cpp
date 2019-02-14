@@ -27,6 +27,7 @@ ParticleSystem* ParticleManager::CreateParticleSystem()
 }
 void ParticleManager::Update(double dt)
 {
+	if (Themp::System::m_WindowIsChanging)return;
 
 	ID3D11DeviceContext* devcon = Themp::D3D::s_D3D->m_DevCon;
 
