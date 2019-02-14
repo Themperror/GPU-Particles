@@ -10,6 +10,7 @@ public:
 	void Update(double dt);
 	void Draw();
 	~ParticleManager();
+	bool m_DrawQuads = false;
 
 	std::vector<ParticleSystem*> m_ParticleSystems;
 	ID3D11ComputeShader* m_ParticleInitShader = nullptr;

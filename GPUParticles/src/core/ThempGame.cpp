@@ -42,6 +42,7 @@ void Themp::Game::Update(double dt)
 	ParticleSystem::ParticleSystemBuffer& cBufferData = m_ParticleManager->m_ParticleSystems[0]->m_ParticleSystemConstantBufferData;
 
 	ImGui::Text("Particle Count: %i", m_ParticleManager->m_ParticleSystems[0]->m_CurrentParticleCount);
+	ImGui::Checkbox("Draw Quads", &m_ParticleManager->m_DrawQuads);
 	ImGui::SliderInt("Particles Per Second", &cBufferData.rate, 0, 100000);
 	ImGui::SliderFloat("Gravity", &cBufferData.gravity, 0.1, 100);
 	ImGui::SliderFloat2("Lifetime (Min/Max)", &cBufferData.LifeTimeMin, 0, 30);

@@ -73,14 +73,14 @@ ParticleSystem::ParticleSystem(int maxParticles)
 
 	//create texture with random noise
 	m_RandomTexture = new Themp::Texture();
-	char* randompixels = new char[1024 * 1024*4];
+	float* randompixels = new float[2048 * 2048];
 	std::default_random_engine generator;
-	for (size_t i = 0; i < 1024 * 1024 * 4; i++)
+	for (size_t i = 0; i < 2048 * 2048; i++)
 	{
-		std::uniform_int_distribution<int> distribution(0, 255);
+		std::uniform_real_distribution<float> distribution(0, 1);
 		randompixels[i] = distribution(generator);
 	}
-	m_RandomTexture->Create(1024, 1024, DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM, false, randompixels);
+	m_RandomTexture->Create(2048, 2048, DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT, false, randompixels);
 	delete[] randompixels;
 
 }

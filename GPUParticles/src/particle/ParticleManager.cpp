@@ -17,7 +17,7 @@ ParticleManager::ParticleManager()
 	m_ParticleEmitShader = Themp::Resources::TRes->GetComputeShader(std::string(BASE_SHADER_PATH) + "particleEmit_cs.cso");
 	m_ParticleUpdateShader = Themp::Resources::TRes->GetComputeShader(std::string(BASE_SHADER_PATH) + "particleSim_cs.cso");
 #endif
-	m_ParticleMaterial = Themp::Resources::TRes->GetMaterial("Particle", "", "particle", false);
+	m_ParticleMaterial = Themp::Resources::TRes->GetMaterial("Particle", "", "particle", true);
 }
 ParticleSystem* ParticleManager::CreateParticleSystem()
 {
@@ -62,12 +62,23 @@ void ParticleManager::Draw()
 	devcon->IASetVertexBuffers(0,1, nullBuffs,nullstrides, nullstrides);
 	devcon->VSSetShader(m_ParticleMaterial->m_VertexShader, 0, 0);
 	devcon->PSSetShader(m_ParticleMaterial->m_PixelShader, 0, 0);
+	if (m_DrawQuads)
+	{
+		devcon->GSSetShader(m_ParticleMaterial->m_GeometryShader, 0, 0);
+	}
+	else
+	{
+		devcon->GSSetShader(nullptr, 0, 0);
+	}
 	Themp::D3D::s_D3D->VSUploadConstantBuffersToGPU();
 	Themp::D3D::s_D3D->PSUploadConstantBuffersToGPU();
+	Themp::D3D::s_D3D->GSUploadConstantBuffersToGPU();
 	for (int i = 0; i < m_ParticleSystems.size(); i++)
 	{
 		m_ParticleSystems[i]->Draw();
 	}
+
+	devcon->GSSetShader(nullptr, 0, 0);
 	devcon->CSSetShader(0, 0, 0);
 	devcon->CSSetConstantBuffers(0,5, nullBuffs);
 	ID3D11ShaderResourceView* nullSRVs[5] = { nullptr, nullptr, nullptr, nullptr, nullptr, };

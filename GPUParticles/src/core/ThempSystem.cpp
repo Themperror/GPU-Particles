@@ -198,6 +198,9 @@ namespace Themp
 				ImGui::Render();
 				m_D3D->m_ConstantBufferData.time = (float)time;
 				m_D3D->m_ConstantBufferData.deltaTime = totalDelta;
+				m_D3D->m_ConstantBufferData.d1 = rand();
+				m_D3D->m_ConstantBufferData.d2 = rand();
+				m_D3D->m_ConstantBufferData.d3 = rand();
 				m_D3D->dirtySystemBuffer = true;
 				m_D3D->PrepareSystemBuffer();
 				m_D3D->Draw(*m_Game);
