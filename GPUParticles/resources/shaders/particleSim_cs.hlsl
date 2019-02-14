@@ -30,11 +30,12 @@ void CShader(uint3 DTid : SV_DispatchThreadID)
 		
 		float3 dirToCenter = normalize(_position.xyz - cPos);
 		float dist = distance(_position.xyz , cPos);
+        dist *= dist;
 
 		//float3 strengthToCenter = _gravity * (_mass / dist * dist) * dirToCenter;
 
-        float force = _gravity * ((1.0 / dist * dist) + 0.01);
-
+       // float force = _gravity * ((_mass / (dist + 0.01)));
+        float force = clamp((_gravity * _mass) / (dist + 0.01), 0, 750);
 		float3 movementVector = dirToCenter;
         float3 acceleration = GetAcceleration(movementVector, force, oldVelocity, 0, _mass);
 
