@@ -25,28 +25,26 @@ void CShader(uint3 DTid : SV_DispatchThreadID)
 
 		ParticleOut[i] = ParticleIn[i];
 		float3 cPos = ParticleIn[i].position.xyz;
-		float3 oldPos = ParticleIn[i].prevPosition.xyz;
 		float3 oldVelocity = (ParticleIn[i].velocity.xyz);
 		
 		float3 dirToCenter = normalize(_position.xyz - cPos);
 		float dist = distance(_position.xyz , cPos);
         dist *= dist;
-
-		//float3 strengthToCenter = _gravity * (_mass / dist * dist) * dirToCenter;
-
-       // float force = _gravity * ((_mass / (dist + 0.01)));
+		
+		//basic n-body gravity, clamped to prevent shooting particles
         float force = clamp((_gravity * _mass) / (dist + 0.01), 0, 750);
 		float3 movementVector = dirToCenter;
-        float3 acceleration = GetAcceleration(movementVector, force, oldVelocity, 0, _mass);
 
+		//verlet integration
+        float3 acceleration = GetAcceleration(movementVector, force, oldVelocity, 0, _mass);
 		float3 halfStepVel = oldVelocity + 0.5 * _deltaTime * acceleration;
+
 		ParticleOut[i].position += float4(halfStepVel * _deltaTime, 0.0);
-		ParticleOut[i].prevPosition = float4(cPos, 1);
 		
         acceleration = GetAcceleration(movementVector, force, halfStepVel, 0, _mass);
 		float3 newVelocity = halfStepVel + 0.5 * _deltaTime * acceleration;
+
 		ParticleOut[i].velocity = float4(newVelocity, 0.0);
-			
 		ParticleOut[i].age -= _deltaTime;
 
     }

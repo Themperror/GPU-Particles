@@ -26,12 +26,14 @@ void CShader(uint3 DTid : SV_DispatchThreadID )
     AllMemoryBarrier();
 
     currentParticleAmount = ParticleCountOut[0].x;
-	//we need any initial non-0 seed, so the +512 is arbitrarily chosen
-    float2 uv = float2(_time + _random.x, _time + _random.y);
+
+	//Try to get as random as we can, this is such a pain.
+    float2 uv = float2((float)DTid.x + _time + _random.x, _time + _random.y);
+	//The texture returns a value between 0 and 1, so we multiply it with max uint32 to get a full uint range
     uint rand = DTid.x + (uint)_random.z + ((uint) (Random.Gather(WrappedPointSampler, uv).x * (float) 0xFFFFFFFF));
 
-	//"spawn" our amount of particles
 
+	//prepare to "spawn" our amount of particles
 	//make sure we never write more particles than we have allocated space for
     float particlesToEmit = (float) _emitRate * _deltaTime;
     if ((float) currentParticleAmount + particlesToEmit >= (float)_maxParticles)
@@ -60,7 +62,7 @@ void CShader(uint3 DTid : SV_DispatchThreadID )
         const uint DivCutoff = fmod(particlesToEmitPerThread, 1.0) * totalThreads;
         //add the missing particles to the first thread
 		const uint endEmit = (NumParticlesPerThread + (DTid.x == 0 ? DivCutoff : 0));
-        for (int i = 0; i < endEmit; i++)
+        for (uint i = 0; i < endEmit; i++)
         {
             SpawnParticle(rand);
         }

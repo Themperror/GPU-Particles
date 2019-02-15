@@ -44,7 +44,7 @@ void ParticleManager::Update(double dt)
 		}
 		ps->Update(dt, m_ParticleEmitShader, m_ParticleUpdateShader);
 	}
-
+	//set everything back to null, we don't want to influence the rest of the calls
 	devcon->CSSetShader(0, 0, 0);
 	ID3D11Buffer* nullBuffs[5] = { nullptr, nullptr, nullptr, nullptr, nullptr, };
 	devcon->CSSetConstantBuffers(0, 5, nullBuffs);
@@ -65,6 +65,7 @@ void ParticleManager::Draw()
 	devcon->PSSetShader(m_ParticleMaterial->m_PixelShader, 0, 0);
 	if (m_DrawQuads)
 	{
+		//simply the addition of a geometry shader is enough to transform our points to quads, we needn't do anything else.
 		devcon->GSSetShader(m_ParticleMaterial->m_GeometryShader, 0, 0);
 	}
 	else

@@ -12,7 +12,6 @@ class ParticleSystem
 		XMFLOAT4 velocity;
 		XMFLOAT4 color;
 		XMFLOAT4 position;
-		XMFLOAT4 prevPosition;
 	};
 	class ComputeData
 	{
@@ -120,6 +119,7 @@ public:
 
 	DispatchBuffer m_DispatchBufferData;
 	ID3D11Buffer* m_DispatchBuffer = nullptr;
+	ID3D11Buffer* m_CPUParticleCountReadBuffer = nullptr;
 	ID3D11Buffer* m_InstancedDrawBuffer = nullptr;
 
 	ComputeData m_ParticleCount[2];

@@ -38,7 +38,6 @@ struct Particle
     float4 velocity;
     float4 color;
     float4 position;
-    float4 prevPosition;
 };
 StructuredBuffer<Particle> ParticleIn : register(t0);
 StructuredBuffer<int> ParticleCountIn : register(t1);
@@ -49,6 +48,7 @@ RWStructuredBuffer<int> ParticleCountOut : register(u1);
 
 SamplerState WrappedPointSampler : register(s0);
 
+//returns a "random" (its a hash that re-uses and changes its previous seed) value between 0 and 1, useful for lerps!
 float wang_hash(inout uint seed)
 {
     seed = (seed ^ 61) ^ (seed >> 16);
@@ -62,12 +62,14 @@ float wang_hash(inout uint seed)
 void SpawnParticle(inout uint rand)
 {
     uint index = 0;
+	//atomically increase our particle count by one
     InterlockedAdd(ParticleCountOut[0].x, 1, index);
+
+	//set all values to a random value between min and max
     ParticleOut[index].age = lerp(_lifeTimeMin, _lifeTimeMax, wang_hash(rand));
     ParticleOut[index].velocity = (float4(lerp(_velocityMin.x, _velocityMax.x, wang_hash(rand)), lerp(_velocityMin.y, _velocityMax.y, wang_hash(rand)), lerp(_velocityMin.z, _velocityMax.z, wang_hash(rand)), 0));
     ParticleOut[index].scale = lerp(_scaleMin, _scaleMax, wang_hash(rand));
     float4 position = _position + float4(lerp(_positionMin.x, _positionMax.x, wang_hash(rand)), lerp(_positionMin.y, _positionMax.y, wang_hash(rand)), lerp(_positionMin.z, _positionMax.z, wang_hash(rand)), 0);
     ParticleOut[index].position = position;
     ParticleOut[index].color = float4(lerp(0, 1, wang_hash(rand)), lerp(0, 1, wang_hash(rand)), lerp(0, 1, wang_hash(rand)), 1);
-    ParticleOut[index].prevPosition = position;
 }

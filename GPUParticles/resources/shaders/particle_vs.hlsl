@@ -7,7 +7,6 @@ struct Particle
     float d3;
     float4 color;
     float4 position;
-    float4 prevPosition;
 };
 
 StructuredBuffer<Particle> ParticleIn : register(t0);
